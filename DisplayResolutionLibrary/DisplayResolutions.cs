@@ -12,12 +12,12 @@ namespace DisplayResolutionLibrary
         public string Designation { get; private set; }
 
         /// <summary>
-        /// Get the width aspect of the frame
+        /// Get the width of the frame
         /// </summary>
         public int Width { get; private set; }
 
         /// <summary>
-        /// Get the height aspect of the frame
+        /// Get the height of the frame
         /// </summary>
         public int Height { get; private set; }
 
@@ -69,7 +69,6 @@ namespace DisplayResolutionLibrary
                 _aspectRatio = aspectRatio;
         }
 
-        // TODO: Move to generic support / tools library
         internal T Clamp<T>(T val, T min, T max) where T : IComparable<T>
         {
             if (val.CompareTo(min) < 0) return min;
@@ -167,6 +166,7 @@ namespace DisplayResolutionLibrary
         /// https://en.wikipedia.org/wiki/Graphics_display_resolution
         /// https://en.wikipedia.org/wiki/Computer_display_standard
         /// https://en.wikipedia.org/wiki/Image_resolution
+        /// https://en.wikipedia.org/wiki/Ultrawide_formats
 
         public static Resolution[] GetArray()
         {
@@ -182,6 +182,8 @@ namespace DisplayResolutionLibrary
             l.AddRange(ExtendedGraphicsArray.GetList());
             l.AddRange(QuadExtendedGraphicsArray.GetList());
             l.AddRange(HyperExtendedGraphicsArray.GetList());
+            l.AddRange(UltraWideCinema.GetList());
+            l.AddRange(UltraWideScreen.GetList());
 
             l.Add(WPAL);
             l.Add(Infinity);
@@ -272,6 +274,27 @@ namespace DisplayResolutionLibrary
         public static Resolution WHSXGA { get { return new Resolution(6400, 4096, nameof(WHSXGA),   "25:16"); } }
         public static Resolution HUXGA  { get { return new Resolution(6400, 4800, nameof(HUXGA),    "4:3"  ); } }
         public static Resolution WHUXGA { get { return new Resolution(7680, 4800, nameof(WHUXGA),   "16:10"); } }
+
+        public static Resolution WHD    { get { return new Resolution( 1720,  720, nameof(WHD),     "43:18"); } }
+        public static Resolution WHDp   { get { return new Resolution( 2160,  900, nameof(WHDp),    "12:5" ); } }
+        public static Resolution WFHD   { get { return new Resolution( 2560, 1080, nameof(WFHD),    "64:27"); } }
+        public static Resolution WFHDp  { get { return new Resolution( 2880, 1200, nameof(WFHDp),   "12:5" ); } }
+        public static Resolution WQHD   { get { return new Resolution( 3440, 1440, nameof(WQHD),    "43:18"); } }
+        public static Resolution UW1600 { get { return new Resolution( 3840, 1600, nameof(UW1600),  "12:5" ); } }
+        public static Resolution WQHDp  { get { return new Resolution( 4320, 1800, nameof(WQHDp),   "12:5" ); } }
+        public static Resolution WUHD   { get { return new Resolution( 5120, 2160, nameof(WUHD),    "64:27"); } }
+        public static Resolution UW2400 { get { return new Resolution( 5760, 2400, nameof(UW2400),  "12:5" ); } }
+        public static Resolution UW2880 { get { return new Resolution( 6880, 2880, nameof(UW2880),  "43:18"); } }
+        public static Resolution UW4320 { get { return new Resolution(10240, 4320, nameof(UW4320),  "64:27"); } }
+
+        public static Resolution DFHD   { get { return new Resolution(3840, 1080, nameof(DFHD),     "32:9" ); } }
+        public static Resolution DFHDp  { get { return new Resolution(3840, 1200, nameof(DFHDp),    "16:5" ); } }
+        public static Resolution SWFHDp { get { return new Resolution(4320, 1200, nameof(SWFHDp),   "18:5" ); } }
+        public static Resolution DQHD   { get { return new Resolution(5120, 1440, nameof(DQHD),     "32:9" ); } }
+        public static Resolution DQHDp  { get { return new Resolution(5120, 1600, nameof(DQHDp),    "16:5" ); } }
+        public static Resolution SWQHDp { get { return new Resolution(5760, 1600, nameof(SWQHDp),   "18:5" ); } }
+        public static Resolution SW6K   { get { return new Resolution(6480, 1800, nameof(SW6K),     "18:5" ); } }
+        public static Resolution SW8K   { get { return new Resolution(8640, 2400, nameof(SW8K),     "18:5" ); } }
 
         public static Resolution WPAL   { get { return new Resolution( 848,  480, nameof(WPAL),     "53:30"); } }
         public static Resolution Infinity{get { return new Resolution(2960, 1440, nameof(Infinity), "18.5:9");} }
@@ -503,11 +526,86 @@ namespace DisplayResolutionLibrary
             return d;
         }
 
-        public static Resolution HXGA   { get { return Resolutions.HXGA;   } }
-        public static Resolution WHXGA  { get { return Resolutions.WHXGA;  } }
-        public static Resolution HSXGA  { get { return Resolutions.HSXGA;  } }
+        public static Resolution HXGA   { get { return Resolutions.HXGA; } }
+        public static Resolution WHXGA  { get { return Resolutions.WHXGA; } }
+        public static Resolution HSXGA  { get { return Resolutions.HSXGA; } }
         public static Resolution WHSXGA { get { return Resolutions.WHSXGA; } }
-        public static Resolution HUXGA  { get { return Resolutions.HUXGA;  } }
+        public static Resolution HUXGA  { get { return Resolutions.HUXGA; } }
         public static Resolution WHUXGA { get { return Resolutions.WHUXGA; } }
+    }
+
+    /// <summary>
+    /// Represents only predefined Ultrawide-Cinema resolutions.
+    /// </summary>
+    public static class UltraWideCinema
+    {
+        public static Resolution[] GetArray()
+        {
+            return GetList().ToArray();
+        }
+        public static List<Resolution> GetList()
+        {
+            return new List<Resolution> { WHD, WHDp, WFHD, WQHD, WFHDp, UW1600, WQHDp, WUHD, UW2400, UW2880, UW4320 };
+        }
+        /// <summary>
+        /// Returns a dictionary of the resolutions, indexed by designation.
+        /// </summary>
+        public static Dictionary<string, Resolution> GetDictionary()
+        {
+            Dictionary<string, Resolution> d = new Dictionary<string, Resolution>();
+
+            foreach (Resolution r in GetList())
+                d[r.Designation] = r;
+
+            return d;
+        }
+
+        public static Resolution WHD    { get { return Resolutions.WHD; } }
+        public static Resolution WHDp   { get { return Resolutions.WHDp; } }
+        public static Resolution WFHD   { get { return Resolutions.WFHD; } }
+        public static Resolution WFHDp  { get { return Resolutions.WFHDp; } }
+        public static Resolution WQHD   { get { return Resolutions.WQHD; } }
+        public static Resolution UW1600 { get { return Resolutions.UW1600; } }
+        public static Resolution WQHDp  { get { return Resolutions.WQHDp; } }
+        public static Resolution WUHD   { get { return Resolutions.WUHD; } }
+        public static Resolution UW2400 { get { return Resolutions.UW2400; } }
+        public static Resolution UW2880 { get { return Resolutions.UW2880; } }
+        public static Resolution UW4320 { get { return Resolutions.UW4320; } }
+    }
+    
+    /// <summary>
+    /// Represents only predefined Ultra-Widescreen resolutions.
+    /// </summary>
+    public static class UltraWideScreen
+    {
+        public static Resolution[] GetArray()
+        {
+            return GetList().ToArray();
+        }
+        public static List<Resolution> GetList()
+        {
+            return new List<Resolution> { DFHD, DFHDp, SWFHDp, DQHD, DQHDp, SWQHDp, SW6K, SW8K };
+        }
+        /// <summary>
+        /// Returns a dictionary of the resolutions, indexed by designation.
+        /// </summary>
+        public static Dictionary<string, Resolution> GetDictionary()
+        {
+            Dictionary<string, Resolution> d = new Dictionary<string, Resolution>();
+
+            foreach (Resolution r in GetList())
+                d[r.Designation] = r;
+
+            return d;
+        }
+
+        public static Resolution DFHD   { get { return Resolutions.DFHD; } }
+        public static Resolution DFHDp  { get { return Resolutions.DFHDp; } }
+        public static Resolution SWFHDp { get { return Resolutions.SWFHDp; } }
+        public static Resolution DQHD   { get { return Resolutions.DQHD; } }
+        public static Resolution DQHDp  { get { return Resolutions.DQHDp; } }
+        public static Resolution SWQHDp { get { return Resolutions.SWQHDp; } }
+        public static Resolution SW6K   { get { return Resolutions.SW6K; } }
+        public static Resolution SW8K   { get { return Resolutions.SW8K; } }
     }
 }
